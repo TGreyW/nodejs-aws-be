@@ -21,7 +21,7 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/ProductsResponse"
-  /product/{productId}:
+  /product:
     get:
       tags:
         - "productService"
@@ -29,7 +29,7 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - name: "productId"
+        - name: "id"
           in: "query"
           description: "Product id"
           required: false
