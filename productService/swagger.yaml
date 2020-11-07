@@ -21,6 +21,8 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/ProductsResponse"
+        500:
+          description: "Internal server error"
   /product:
     get:
       tags:
@@ -33,7 +35,7 @@ paths:
           in: "query"
           description: "Product id"
           required: false
-          type: "integer"
+          type: "string"
       responses:
         200:
           description: "OK"
@@ -41,8 +43,23 @@ paths:
             $ref: "#/definitions/Product"
         404:
           description: "Not found"
+        500:
+          description: "Internal server error"
+    post:
+      summary: "Create new product"
+      parameters:
+        - in: body
+          name: "Product"
+          description: "Product to create"
           schema:
-            type: "object"
+            $ref: '#/definitions/Product'
+      responses:
+        201:
+          description: "Product created"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal server error"
 definitions:
   ProductsResponse:
     type: "array"
@@ -59,7 +76,5 @@ definitions:
         type: "string"
       price:
         type: "number"
-      currency:
-        type: "string"
       count:
         type: "integer"
