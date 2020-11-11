@@ -1,3 +1,17 @@
+CREATE TABLE public.products (
+    id uuid NULL,
+    title text NOT NULL,
+    description text NULL,
+    price integer NULL,
+    CONSTRAINT products_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE public.stock (
+    product_id uuid NULL,
+    count integer NOT NULL,
+    CONSTRAINT stocks_fk FOREIGN KEY (product_id) REFERENCES public.products(id)
+);
+
 INSERT INTO public.products (id,title,description,price)
 	VALUES ('339465d0-2077-11eb-bbe3-028d774dc6a1','Пирожок с картохой','Сойдет по вкусу',10);
 INSERT INTO public.products (id,title,description,price)
