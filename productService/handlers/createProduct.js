@@ -17,38 +17,34 @@ const dbOptions = {
 };
 
 module.exports = async event => {
-    if (!event) {
-        event = {};
-    }
-
     const client = new Client(dbOptions);
     try {
-        await client.connect();
-
-        const { id } = event.queryStringParameters || '';
-        console.log(`getProductById request: id ${id}`);
-        const result = await client.query(
-            `
-                select * from products p 
-                  inner join stock s on s.product_id = p.id
-                where p.id = $1::uuid
-            `,
-            [id],
-        );
-
-        if (result && result.rowCount > 0) {
+        console.log(`createProduct request`);
+        const body = JSON.parse(event.body || '{}');
+        if (!Object.keys(body).length) {
             return {
-                statusCode: 200,
+                statusCode: 400,
                 isBase64Encoded: false,
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                 },
-                body: JSON.stringify(result.rows[0]),
+                body: JSON.stringify({}),
             };
         }
 
+        await client.connect();
+        await client.query('BEGIN');
+        await client.query(`
+            INSERT INTO public.products (id,title,description,price)
+                VALUES ($1, $2, $3, $4);
+        `, [body.id, body.title, body.description, body.price]);
+        await client.query(`
+            INSERT INTO public.stock (product_id, count)
+                VALUES ($1, $2);
+        `, [body.id, body.count]);
+        await client.query('COMMIT');
         return {
-            statusCode: 404,
+            statusCode: 201,
             isBase64Encoded: false,
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -57,6 +53,7 @@ module.exports = async event => {
         };
     } catch (e) {
         console.log(e);
+        await client.query('ROLLBACK');
 
         return {
             statusCode: 500,

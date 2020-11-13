@@ -43,8 +43,12 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  environment:
+    PG_HOST: storage.c2ljo3yhegym.eu-west-1.rds.amazonaws.com
+    PG_PORT: 5432
+    PG_DATABASE: shop
+    PG_USERNAME:
+    PG_PASSWORD:
 
 # you can add packaging information here
 #package:
@@ -69,6 +73,13 @@ functions:
       - http:
           path: product
           method: get
+          cors: true
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - http:
+          path: product
+          method: post
           cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
