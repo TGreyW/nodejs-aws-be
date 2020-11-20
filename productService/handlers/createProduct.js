@@ -34,14 +34,14 @@ module.exports = async event => {
 
         await client.connect();
         await client.query('BEGIN');
-        await client.query(`
-            INSERT INTO public.products (id,title,description,price)
-                VALUES ($1, $2, $3, $4);
-        `, [body.id, body.title, body.description, body.price]);
+        const insertResult = await client.query(`
+            INSERT INTO public.products (title,description,price)
+                VALUES ($1, $2, $3) RETURNING id;
+        `, [body.title, body.description, body.price]);
         await client.query(`
             INSERT INTO public.stock (product_id, count)
                 VALUES ($1, $2);
-        `, [body.id, body.count]);
+        `, [insertResult.rows[0].id, body.count]);
         await client.query('COMMIT');
         return {
             statusCode: 201,
