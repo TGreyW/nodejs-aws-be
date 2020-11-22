@@ -35,7 +35,7 @@ module.exports = async (event) => {
                 Bucket: DEFAULT_BUCKET_NAME,
                 Key: DEFAULT_CATALOG + '/' + name,
                 Expires: 60,
-                ContentType: 'text/csv',
+                ContentType: 'text/csv; charset=utf-8',
             }
         );
 
