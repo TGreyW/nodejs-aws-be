@@ -49,6 +49,7 @@ module.exports = async (event) => {
         };
     } catch (e) {
         console.log(e);
+
         return {
             statusCode: 500,
             isBase64Encoded: false,
