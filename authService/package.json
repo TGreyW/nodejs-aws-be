@@ -1,0 +1,9 @@
+{
+  "name": "AuthService",
+  "version": "1.0.0",
+  "scripts": {},
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "serverless-dotenv-plugin": "^3.1.0"
+  }
+}

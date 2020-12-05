@@ -1,0 +1,26 @@
+service: authservice
+
+plugins:
+  - serverless-dotenv-plugin
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+# functions here
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
+
+# you can add CloudFormation resource templates here
+resources:
+  Outputs:
+    AuthArn:
+      Value:
+        Fn::GetAtt: [BasicAuthorizerLambdaFunction, Arn]
+      Export:
+        Name: AuthArn
